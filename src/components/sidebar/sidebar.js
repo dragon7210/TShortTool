@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setState, unState } from "../../reducer/imgState";
 import { setName } from "../../reducer/imgName";
 
 import { Dropzone, FileItem } from "@dropzone-ui/react";
 import { CompactPicker } from "react-color";
+import { setChangeColor } from "reducer/changeColor";
 
 import "./sidebar.scss";
 
@@ -13,6 +14,7 @@ const Sidebar = () => {
   const [garment, setGarment] = useState(false);
   const [files, setFiles] = useState([]);
   const [selColor, setSelColor] = useState("");
+  const [selCurColor, setSelCurColor] = useState("");
 
   const dispatch = useDispatch();
   const updateFiles = (e) => {
@@ -24,7 +26,7 @@ const Sidebar = () => {
     dispatch(setName(temp));
     dispatch(unState());
   };
-
+  const getColors = useSelector((e) => e.getColor.value);
   return (
     <div className="sidebar">
       <div className="left">
@@ -46,7 +48,7 @@ const Sidebar = () => {
           }}
         >
           <img
-            src="/image/garment-color"
+            src="/image/garment-color.png"
             alt="garment"
             style={{ marginTop: "8px" }}
           />
@@ -62,7 +64,7 @@ const Sidebar = () => {
                 <FileItem key={index} {...file} preview />
               ))}
             </Dropzone>
-            <button className="upload" onClick={() => dispatch(setState())}>
+            <button className="buttonType" onClick={() => dispatch(setState())}>
               Upload
             </button>
           </div>
@@ -71,11 +73,52 @@ const Sidebar = () => {
         )}
         {garment === true ? (
           <div className="garmentPage">
+            <p>Choose which color to change</p>
+            <div className="current">
+              {getColors.map((ele, index) =>
+                selCurColor !== ele ? (
+                  <div
+                    className="color"
+                    key={index}
+                    style={{ backgroundColor: `${ele}` }}
+                    onClick={() => setSelCurColor(ele)}
+                  />
+                ) : (
+                  <div
+                    className="selCurColor"
+                    key={index}
+                    style={{ backgroundColor: `${ele}` }}
+                    onClick={() => setSelCurColor(ele)}
+                  />
+                )
+              )}
+            </div>
+            <p>Choose a new color</p>
+            <div className="selColor">
+              <p>Selected color :</p>
+              <div
+                className="color"
+                style={{
+                  backgroundColor: `${selColor}`,
+                  marginTop: "3px",
+                  marginLeft: "4px",
+                }}
+              ></div>
+            </div>
             <CompactPicker
               styles={{ width: "100%" }}
               color={selColor}
               onChangeComplete={(e) => setSelColor(e.hex)}
             />
+
+            <div>
+              <button
+                className="buttonType"
+                onClick={() => dispatch(setChangeColor(selCurColor, selColor))}
+              >
+                done
+              </button>
+            </div>
           </div>
         ) : (
           <></>

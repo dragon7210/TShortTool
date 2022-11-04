@@ -3,7 +3,7 @@
   display: flex;
   background-color: #fff;
   padding: 70px 20px;
-  width: 40%;
+  width: 400px;
   .left {
     padding-right: 20px;
     .icon {
@@ -34,18 +34,41 @@
       .title {
         text-align: center;
       }
-      .upload {
-        background-color: blue;
-        color: white;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: 5px;
-        border: none;
-        float: right;
-        width: 100px;
-      }
+    }
+    .buttonType {
+      background-color: blue;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 100px;
     }
     .garmentPage {
+      .selColor {
+        margin-bottom: 10px;
+        display: flex;
+        p {
+          margin: 0px;
+        }
+      }
+      .current {
+        display: flex;
+      }
+      .color {
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+      }
+      .color:hover {
+        scale: 1.1;
+      }
+      .selCurColor {
+        border: solid 2px red;
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+      }
     }
   }
 }

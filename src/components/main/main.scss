@@ -1,6 +1,7 @@
 .main {
   background-image: url("/image/front.png");
-  width: calc(60% - 40px);
+  background-repeat: no-repeat;
+  width: calc(100% - 430px);
   img {
     width: 100px;
   }
