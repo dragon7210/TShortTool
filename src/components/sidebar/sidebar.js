@@ -1,20 +1,30 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setState } from "../../reducer/imgState";
+import { setName } from "../../reducer/imgName";
 
 import { Dropzone, FileItem } from "@dropzone-ui/react";
+import { CompactPicker } from "react-color";
 import UploadImg from "image/upload.png";
 import Gammet from "image/garment-color.png";
 
 import "./sidebar.scss";
 
 const Sidebar = () => {
-  const [upload, setUpload] = useState(false);
+  const [upload, setUpload] = useState(true);
   const [garment, setGarment] = useState(false);
   const [files, setFiles] = useState([]);
+  const [selColor, setSelColor] = useState("");
 
-  const updateFiles = (incommingFiles) => {
-    setFiles(incommingFiles);
+  const dispatch = useDispatch();
+  const updateFiles = (e) => {
+    const temp = [];
+    setFiles(e);
+    e.forEach((element) => {
+      temp.push(element.file.name);
+    });
+    dispatch(setName(temp));
   };
-  console.log(files);
 
   return (
     <div className="sidebar">
@@ -45,16 +55,28 @@ const Sidebar = () => {
           <div className="uploadPage">
             <p className="title">Choose a file to upload</p>
             <Dropzone onChange={updateFiles} value={files}>
-              {files.map((file) => (
-                <FileItem {...file} preview />
+              {files.map((file, index) => (
+                <FileItem key={index} {...file} preview />
               ))}
             </Dropzone>
-            <button className="upload">Upload</button>
+            <button className="upload" onClick={() => dispatch(setState())}>
+              Upload
+            </button>
           </div>
         ) : (
           <></>
         )}
-        {garment === true ? <div className="garmentPage"></div> : <></>}
+        {garment === true ? (
+          <div className="garmentPage">
+            <CompactPicker
+              styles={{ width: "100%" }}
+              color={selColor}
+              onChangeComplete={(e) => setSelColor(e.hex)}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
