@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setState } from "../../reducer/imgState";
+import { setState, unState } from "../../reducer/imgState";
 import { setName } from "../../reducer/imgName";
 
 import { Dropzone, FileItem } from "@dropzone-ui/react";
 import { CompactPicker } from "react-color";
-import UploadImg from "image/upload.png";
-import Gammet from "image/garment-color.png";
 
 import "./sidebar.scss";
 
@@ -24,6 +22,7 @@ const Sidebar = () => {
       temp.push(element.file.name);
     });
     dispatch(setName(temp));
+    dispatch(unState());
   };
 
   return (
@@ -36,7 +35,7 @@ const Sidebar = () => {
             setGarment(false);
           }}
         >
-          <img src={UploadImg} alt="upload" />
+          <img src="image/upload.png" alt="upload" />
           <p className="sidetext">Upload</p>
         </div>
         <div
@@ -46,7 +45,11 @@ const Sidebar = () => {
             setUpload(false);
           }}
         >
-          <img src={Gammet} alt="garment" style={{ marginTop: "8px" }} />
+          <img
+            src="/image/garment-color"
+            alt="garment"
+            style={{ marginTop: "8px" }}
+          />
           <p className="sidetext">Garment color</p>
         </div>
       </div>

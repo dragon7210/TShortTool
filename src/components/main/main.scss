@@ -1,7 +1,7 @@
 .main {
+  background-image: url("/image/front.png");
   width: calc(60% - 40px);
   img {
-    height: calc(100vh - 40px);
-    float: right;
+    width: 100px;
   }
 }

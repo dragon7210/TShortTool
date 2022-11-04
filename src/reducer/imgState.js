@@ -11,9 +11,12 @@ export const ImgState = createSlice({
     setState: () => {
       return { value: true };
     },
+    unState: () => {
+      return { value: false };
+    },
   },
 });
 
-export const { setState } = ImgState.actions;
+export const { setState, unState } = ImgState.actions;
 
 export default ImgState.reducer;
