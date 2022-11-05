@@ -3,7 +3,7 @@ import { ColorExtractor } from "react-color-extractor";
 
 import { getColor } from "reducer/getColor";
 import "./main.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 function HexToRGB(Hex) {
   var Long = parseInt(Hex.replace(/^#/, ""), 16);
