@@ -27,6 +27,7 @@ const Sidebar = () => {
     dispatch(unState());
   };
   const getColors = useSelector((e) => e.getColor.value);
+
   return (
     <div className="sidebar">
       <div className="left">
@@ -64,7 +65,12 @@ const Sidebar = () => {
                 <FileItem key={index} {...file} preview />
               ))}
             </Dropzone>
-            <button className="buttonType" onClick={() => dispatch(setState())}>
+            <button
+              className="buttonType"
+              onClick={() => {
+                dispatch(setState());
+              }}
+            >
               Upload
             </button>
           </div>
