@@ -25,7 +25,6 @@ const Main = () => {
   const imageRef = useRef(null);
   const resImageRef = useRef(null);
   const canvasRef = useRef(null);
-  // const [changeColorset, setChangeColorset] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -37,16 +36,14 @@ const Main = () => {
     targetColor
   ) {
     const ctx = canvasRef.current.getContext("2d");
-    if (!pixelData) return; // Check if image has loaded
+    if (!pixelData) return;
     var newColor = HexToRGB(targetColor);
     var originColor = HexToRGB(originalColor);
-
-    console.log(originColor);
 
     for (var I = 0, L = pixelData.data.length; I < L; I += 4) {
       if (newPixelData.data[I + 3] > 0) {
         if (
-          isInRange(pixelData.data[I], originColor.R, 42.5) &&
+          isInRange(pixelData.data[I], originColor.R, 51) &&
           isInRange(pixelData.data[I + 1], originColor.G, 51) &&
           isInRange(pixelData.data[I + 2], originColor.B, 51)
         ) {
@@ -108,7 +105,6 @@ const Main = () => {
             dispatch(getColor(e));
             handleChange();
           }}
-          maxColors={128}
         >
           <img
             src={`/image/${imgName[imgName.length - 1]}`}
