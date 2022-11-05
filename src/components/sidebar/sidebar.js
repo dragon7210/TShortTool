@@ -115,10 +115,19 @@ const Sidebar = () => {
               <button
                 className="buttonType"
                 onClick={() =>
+                  dispatch(setChangeColor({ selCurColor, selColor: "#FFFFFF" }))
+                }
+                style={{ marginRight: "20px" }}
+              >
+                Reset
+              </button>
+              <button
+                className="buttonType"
+                onClick={() =>
                   dispatch(setChangeColor({ selCurColor, selColor }))
                 }
               >
-                done
+                Done
               </button>
             </div>
           </div>
