@@ -1,9 +1,13 @@
+import { useEffect, useRef, useState } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { ColorExtractor } from "react-color-extractor";
+import Draggable from "react-draggable";
 
 import { getColor } from "reducer/getColor";
 import "./main.scss";
-import { useEffect, useRef } from "react";
+import Slider from "react-rangeslider";
+import "react-rangeslider/lib/index.css";
 
 function HexToRGB(Hex) {
   var Long = parseInt(Hex.replace(/^#/, ""), 16);
@@ -25,6 +29,7 @@ const Main = () => {
   const imageRef = useRef(null);
   const resImageRef = useRef(null);
   const canvasRef = useRef(null);
+  const [value, setValue] = useState(1);
 
   const dispatch = useDispatch();
 
@@ -43,9 +48,9 @@ const Main = () => {
     for (var I = 0, L = pixelData.data.length; I < L; I += 4) {
       if (newPixelData.data[I + 3] > 0) {
         if (
-          isInRange(pixelData.data[I], originColor.R, 51) &&
-          isInRange(pixelData.data[I + 1], originColor.G, 51) &&
-          isInRange(pixelData.data[I + 2], originColor.B, 51)
+          isInRange(pixelData.data[I], originColor.R, 20) &&
+          isInRange(pixelData.data[I + 1], originColor.G, 20) &&
+          isInRange(pixelData.data[I + 2], originColor.B, 20)
         ) {
           newPixelData.data[I] = (pixelData.data[I] / 255) * newColor.R;
           newPixelData.data[I + 1] = (pixelData.data[I + 1] / 255) * newColor.G;
@@ -96,9 +101,23 @@ const Main = () => {
     handleChange();
   }, [colors]);
 
+  console.log(value);
   return (
     <div className="main">
-      <canvas ref={canvasRef} />
+      <div className="slider">
+        <Slider
+          min={0}
+          max={5}
+          step={0.1}
+          value={value}
+          onChange={(e) => {
+            setValue(e);
+          }}
+        />
+      </div>
+      <Draggable nodeRef={canvasRef}>
+        <canvas ref={canvasRef} style={{ width: `${value * 300}px` }} />
+      </Draggable>
       {state === true ? (
         <ColorExtractor
           getColors={(e) => {
@@ -110,7 +129,9 @@ const Main = () => {
             src={`/image/${imgName[imgName.length - 1]}`}
             alt="main"
             ref={imageRef}
-            style={{ visibility: "hidden" }}
+            style={{
+              visibility: "hidden",
+            }}
           />
         </ColorExtractor>
       ) : (

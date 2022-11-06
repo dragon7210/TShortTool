@@ -2,7 +2,10 @@
   background-image: url("/image/front.png");
   background-repeat: no-repeat;
   width: calc(100% - 430px);
-  img {
-    width: 300px;
+
+  .slider {
+    width: 400px;
+    float: right;
+    margin-top: 20px;
   }
 }
