@@ -101,7 +101,6 @@ const Main = () => {
     handleChange();
   }, [colors]);
 
-  console.log(value);
   return (
     <div className="main">
       <div className="slider">
