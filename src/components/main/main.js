@@ -24,7 +24,7 @@ function isInRange(a, b, d) {
 
 const Main = () => {
   const state = useSelector((e) => e.state.value);
-  const imgName = useSelector((e) => e.name.value);
+  const imgName = JSON.parse(useSelector((e) => e.name.value));
   const colors = useSelector((e) => e.changeColor.value);
   const imageRef = useRef(null);
   const resImageRef = useRef(null);
@@ -100,7 +100,6 @@ const Main = () => {
   useEffect(() => {
     handleChange();
   }, [colors]);
-
   return (
     <div className="main">
       <div className="slider">
@@ -125,7 +124,7 @@ const Main = () => {
           }}
         >
           <img
-            src={`/image/${imgName[imgName.length - 1]}`}
+            src={imgName ? imgName.preview : ""}
             alt="main"
             ref={imageRef}
             style={{

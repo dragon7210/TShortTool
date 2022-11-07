@@ -7,7 +7,12 @@ import { Dropzone, FileItem } from "@dropzone-ui/react";
 import { CompactPicker } from "react-color";
 import { setChangeColor } from "reducer/changeColor";
 
+import Upload from "image/upload.png";
+import Garment from "image/garment-color.png";
+
 import "./sidebar.scss";
+import axios from "axios";
+import { useCallback } from "react";
 
 const Sidebar = () => {
   const [upload, setUpload] = useState(true);
@@ -15,18 +20,36 @@ const Sidebar = () => {
   const [files, setFiles] = useState([]);
   const [selColor, setSelColor] = useState("");
   const [selCurColor, setSelCurColor] = useState("");
+  const [image, setImage] = useState();
 
   const dispatch = useDispatch();
+
   const updateFiles = (e) => {
     const temp = [];
     setFiles(e);
     e.forEach((element) => {
       temp.push(element.file.name);
     });
-    dispatch(setName(temp));
     dispatch(unState());
   };
   const getColors = useSelector((e) => e.getColor.value);
+
+  const handleUpload = () => {
+    const data = new FormData();
+    data.append("file", files[0].file, files[0].file.name);
+    axios.post("http://localhost:5000/upload", data).then((res) => {
+      console.log(res.statusText);
+    });
+    dispatch(setName(JSON.stringify(image)));
+  };
+  const onDrop = useCallback((acceptedFiles) => {
+    const _files = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file.file),
+      })
+    );
+    setImage(_files[0]);
+  }, []);
 
   return (
     <div className="sidebar">
@@ -38,7 +61,7 @@ const Sidebar = () => {
             setGarment(false);
           }}
         >
-          <img src="image/upload.png" alt="upload" />
+          <img src={Upload} alt="upload" />
           <p className="sidetext">Upload</p>
         </div>
         <div
@@ -48,11 +71,7 @@ const Sidebar = () => {
             setUpload(false);
           }}
         >
-          <img
-            src="/image/garment-color.png"
-            alt="garment"
-            style={{ marginTop: "8px" }}
-          />
+          <img src={Garment} alt="garment" style={{ marginTop: "8px" }} />
           <p className="sidetext">Garment color</p>
         </div>
       </div>
@@ -60,7 +79,7 @@ const Sidebar = () => {
         {upload === true ? (
           <div className="uploadPage">
             <p className="title">Choose a file to upload</p>
-            <Dropzone onChange={updateFiles} value={files}>
+            <Dropzone onChange={updateFiles} onDrop={onDrop} value={files}>
               {files.map((file, index) => (
                 <FileItem key={index} {...file} preview />
               ))}
@@ -68,6 +87,7 @@ const Sidebar = () => {
             <button
               className="buttonType"
               onClick={() => {
+                handleUpload();
                 dispatch(setState());
               }}
             >
@@ -136,6 +156,7 @@ const Sidebar = () => {
                 Done
               </button>
             </div>
+            {/* <img src={image.preview} alt={"tag_image"} /> */}
           </div>
         ) : (
           <></>

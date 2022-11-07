@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: [],
+  value: JSON.stringify({}),
 };
 
 export const ImgName = createSlice({
