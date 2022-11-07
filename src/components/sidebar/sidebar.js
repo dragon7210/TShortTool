@@ -32,16 +32,19 @@ const Sidebar = () => {
     });
     dispatch(unState());
   };
+  
   const getColors = useSelector((e) => e.getColor.value);
 
   const handleUpload = () => {
     const data = new FormData();
     data.append("file", files[0].file, files[0].file.name);
     axios.post("http://localhost:5000/upload", data).then((res) => {
+      dispatch(setState());
       console.log(res.statusText);
     });
     dispatch(setName(JSON.stringify(image)));
   };
+
   const onDrop = useCallback((acceptedFiles) => {
     const _files = acceptedFiles.map((file) =>
       Object.assign(file, {
@@ -88,7 +91,6 @@ const Sidebar = () => {
               className="buttonType"
               onClick={() => {
                 handleUpload();
-                dispatch(setState());
               }}
             >
               Upload

@@ -48,9 +48,9 @@ const Main = () => {
     for (var I = 0, L = pixelData.data.length; I < L; I += 4) {
       if (newPixelData.data[I + 3] > 0) {
         if (
-          isInRange(pixelData.data[I], originColor.R, 20) &&
-          isInRange(pixelData.data[I + 1], originColor.G, 20) &&
-          isInRange(pixelData.data[I + 2], originColor.B, 20)
+          isInRange(pixelData.data[I], originColor.R, 51) &&
+          isInRange(pixelData.data[I + 1], originColor.G, 51) &&
+          isInRange(pixelData.data[I + 2], originColor.B, 51)
         ) {
           newPixelData.data[I] = (pixelData.data[I] / 255) * newColor.R;
           newPixelData.data[I + 1] = (pixelData.data[I + 1] / 255) * newColor.G;
@@ -79,7 +79,6 @@ const Main = () => {
       img.height
     );
     const data = ctx.getImageData(0, 0, img.width, img.height);
-
     return data;
   }
 
@@ -100,6 +99,7 @@ const Main = () => {
   useEffect(() => {
     handleChange();
   }, [colors]);
+
   return (
     <div className="main">
       <div className="slider">
