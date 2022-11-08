@@ -32,15 +32,14 @@ const Sidebar = () => {
     });
     dispatch(unState());
   };
-  
+
   const getColors = useSelector((e) => e.getColor.value);
 
   const handleUpload = () => {
     const data = new FormData();
     data.append("file", files[0].file, files[0].file.name);
-    axios.post("http://localhost:5000/upload", data).then((res) => {
+    axios.post("http://localhost:5000/upload", data).then(() => {
       dispatch(setState());
-      console.log(res.statusText);
     });
     dispatch(setName(JSON.stringify(image)));
   };

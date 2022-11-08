@@ -17,40 +17,69 @@ function HexToRGB(Hex) {
     B: Long & 0xff,
   };
 }
-
-function isInRange(a, b, d) {
-  return a + d >= b && a - d <= b;
+function compareNumbers(a, b) {
+  return a - b;
 }
 
 const Main = () => {
   const state = useSelector((e) => e.state.value);
   const imgName = JSON.parse(useSelector((e) => e.name.value));
   const colors = useSelector((e) => e.changeColor.value);
+  const allColors = useSelector((e) => e.getColor.value);
   const imageRef = useRef(null);
   const resImageRef = useRef(null);
   const canvasRef = useRef(null);
   const [value, setValue] = useState(1);
+  const [min, setMin] = useState({ R: 0, G: 0, B: 0 });
+  const [max, setMax] = useState({ R: 0, G: 0, B: 0 });
 
   const dispatch = useDispatch();
 
-  function changeColor(
-    ref,
-    pixelData,
-    newPixelData,
-    originalColor,
-    targetColor
-  ) {
+  const temp = [];
+  allColors.map((ele) => temp.push(HexToRGB(ele).R));
+  temp.sort(compareNumbers);
+
+  function Order(ele, colors) {
+    if (colors === {}) return;
+    ele.map((element, index) => {
+      if (element === HexToRGB(colors.selCurColor).R) {
+        if (index === 0) {
+          setMin({ R: 0, G: 0, B: 0 });
+          setMax({ R: element, G: element, B: element });
+        } else if (index === 5) {
+          setMin({ R: element, G: element, B: element });
+          setMax({ R: 255, G: 255, B: 255 });
+        } else {
+          setMin({
+            R: ele[index - 1],
+            G: ele[index - 1],
+            B: ele[index - 1],
+          });
+          setMax({
+            R: ele[index + 1],
+            G: ele[index + 1],
+            B: ele[index + 1],
+          });
+        }
+      }
+    });
+  }
+  function isInRange(a, b, c) {
+    return b <= a && a <= c;
+  }
+
+  function changeColor(ref, pixelData, newPixelData, targetColor) {
     const ctx = canvasRef.current.getContext("2d");
     if (!pixelData) return;
+
     var newColor = HexToRGB(targetColor);
-    var originColor = HexToRGB(originalColor);
 
     for (var I = 0, L = pixelData.data.length; I < L; I += 4) {
       if (newPixelData.data[I + 3] > 0) {
         if (
-          isInRange(pixelData.data[I], originColor.R, 51) &&
-          isInRange(pixelData.data[I + 1], originColor.G, 51) &&
-          isInRange(pixelData.data[I + 2], originColor.B, 51)
+          isInRange(pixelData.data[I], min.R, max.R) &&
+          isInRange(pixelData.data[I + 1], min.G, max.G) &&
+          isInRange(pixelData.data[I + 2], min.B, max.B)
         ) {
           newPixelData.data[I] = (pixelData.data[I] / 255) * newColor.R;
           newPixelData.data[I + 1] = (pixelData.data[I + 1] / 255) * newColor.G;
@@ -86,18 +115,13 @@ const Main = () => {
     if (imageRef && canvasRef && imageRef.current && canvasRef.current) {
       const pixelData = getPixels(imageRef.current);
       const newPixelData = getPixels(imageRef.current);
-      changeColor(
-        resImageRef,
-        pixelData,
-        newPixelData,
-        colors.selCurColor,
-        colors.selColor
-      );
+      changeColor(resImageRef, pixelData, newPixelData, colors.selColor);
     }
   };
 
   useEffect(() => {
     handleChange();
+    Order(temp, colors);
   }, [colors]);
 
   return (
@@ -122,6 +146,7 @@ const Main = () => {
             dispatch(getColor(e));
             handleChange();
           }}
+          maxColors={2}
         >
           <img
             src={imgName ? imgName.preview : ""}
